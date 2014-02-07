@@ -11,3 +11,6 @@ project/plugins/project/
 
 # Scala-IDE specific
 .scala_dependencies
+
+# This'll change all the time, don't need to include it
+example_output.txt
