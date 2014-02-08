@@ -68,8 +68,34 @@ object CSP {
 		states
 	}
 
+	/* Count conflicts in a state Map */
+	def countConflicts(state: Map[String, String]) : Int = {
+		/* Convert the across values to one string and the down values to another */
+		var across = ""
+		var down = ""
+
+		for (i <- 1 to (state.size / 2)) {
+			across = across + state("A" + i)
+
+			/* Need to transpose down in order to get correct ordering */
+			for (j <- 1 to (state.size / 2)) {
+				down = down + state("D" + j)(i - 1)
+			}
+		}
+
+		/* Zip the two strings and fold, counting the conflicts */
+		across.zip(down).foldLeft(0) {
+			case (conflicts: Int, (ac: Char, dn: Char)) => if (ac != dn) {
+				conflicts + 1
+			} else {
+				conflicts
+			}
+		}
+	}
+
 	def main(args: Array[String]) {
 		val (words, state) = parseInputFile("example_input.txt")
+		println(countConflicts(state))
 		val outFile: PrintWriter = new PrintWriter("example_output.txt", "UTF-8")
 		try {
 			printState(state, outFile)
